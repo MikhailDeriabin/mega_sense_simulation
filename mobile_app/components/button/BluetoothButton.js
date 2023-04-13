@@ -1,10 +1,10 @@
 import IconButton from "../UI/IconButton";
 import {Color} from "../../constant/color";
-import {BleManager} from "react-native-ble-plx";
 import {Alert, PermissionsAndroid} from "react-native";
+import {BLEManagerSingleton} from "../../util/BLEManagerSingleton";
 
 
-const bleManager = new BleManager();
+const bleManager = BLEManagerSingleton.getInstance();
 
 export default function BluetoothButton({addFoundDevice, resetFoundDevices}) {
     const wrapperStyle = {
@@ -49,11 +49,11 @@ export default function BluetoothButton({addFoundDevice, resetFoundDevices}) {
                     }
 
                     if(device.id){
-                        addFoundDevice({ id: device.id, name: device.localName });
+                        addFoundDevice(device);
                     }
                 });
 
-                setTimeout(stopScan, 5000);
+                setTimeout(stopScan, 3000);
             } else {
                 Alert.alert('Location required', 'Please allow the app use your location');
             }

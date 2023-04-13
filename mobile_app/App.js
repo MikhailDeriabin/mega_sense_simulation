@@ -1,9 +1,10 @@
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import BluetoothButton from "./components/button/BluetoothButton";
 import {Color} from "./constant/color";
 import ScreenTitle from "./components/text/ScreenTitle";
 import NormalText from "./components/text/NormalText";
 import {useState} from "react";
+import FoundDeviceItem from "./components/BLE/FoundDeviceItem";
 
 export default function App() {
     let syncDevices = [];
@@ -41,13 +42,10 @@ export default function App() {
               style={styles.flatList}
               renderItem={ deviceData => {
                   return (
-                      <View style={styles.flatListTextWrapper}>
-                          <NormalText
-                              id={deviceData.item.id}
-                              style={styles.flatListText}
-                              text={deviceData.item.name ? deviceData.item.name : deviceData.item.id}
-                          />
-                      </View>
+                      <FoundDeviceItem
+                          id={deviceData.item.id}
+                          device={deviceData.item}
+                      />
                   );
               } }
           />
@@ -83,16 +81,5 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingVertical: 5,
         paddingHorizontal: 10
-    },
-
-    flatListTextWrapper: {
-        borderWidth: 1,
-        borderColor: Color.elemBorder,
-        paddingVertical: 15,
-        marginBottom: 10
-    },
-
-    flatListText: {
-        textAlign: 'center'
     }
 });
