@@ -3,9 +3,11 @@ const {Point, InfluxDB, HttpError} = require("@influxdata/influxdb-client");
 class InfluxHandler {
     constructor() {
        this.influxObj = new InfluxDB({url: this.#url, token: this.#token});
+       this.readAPI = this.influxObj.getQueryApi(this.#org);
     }
 
     influxObj;
+    readAPI;
 
     #url = process.env.INFLUX_URL;
     #token = process.env.INFLUX_TOKEN;
@@ -34,23 +36,7 @@ class InfluxHandler {
     readAll = async () => {
         //last 100 days data
         const fluxTempQuery = `from(bucket:"esp32") |> range(start: -100d) |> filter(fn: (r) => r._field == "temp")`;
-        const readAPI = await this.influxObj.getQueryApi(this.#org);
-
-        const result = await readAPI.collectRows(
-            fluxTempQuery
-        )
-
-        try {
-            readAPI.close();
-        } catch (e) {
-            if (e instanceof HttpError) {
-                console.error(e.statusCode);
-                console.error(e.statusMessage);
-            } else
-                console.log(e);
-        }
-
-        return result;
+        return await this.readAPI.collectRows(fluxTempQuery);
     }
 }
 
