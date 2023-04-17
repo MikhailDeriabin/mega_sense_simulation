@@ -1,32 +1,11 @@
 import IconButton from "../UI/IconButton";
 import {Color} from "../../constant/color";
-import {Alert, PermissionsAndroid} from "react-native";
+import {Alert, PermissionsAndroid, StyleSheet} from "react-native";
 import {BLEManagerSingleton} from "../../util/BLEManagerSingleton";
-
 
 const bleManager = BLEManagerSingleton.getInstance();
 
 export default function BluetoothButton({addFoundDevice, resetFoundDevices}) {
-    const wrapperStyle = {
-        width: 150,
-        padding: 10,
-        backgroundColor: Color.elemBg
-    }
-
-    const textWrapperStyle = {
-        marginRight: 5
-    }
-
-    const btnTextStyle = {
-        color: Color.elemText
-    }
-
-    const icon = {
-        name: 'bluetooth',
-        size: 20,
-        color: Color.icon
-    }
-
     const text = 'Find device';
 
     function stopScan() {
@@ -46,11 +25,11 @@ export default function BluetoothButton({addFoundDevice, resetFoundDevices}) {
                     if(e){
                         console.log('error', e);
                         bleManager.stopDeviceScan();
+                        return;
                     }
 
-                    if(device.id){
+                    if(device.id)
                         addFoundDevice(device);
-                    }
                 });
 
                 setTimeout(stopScan, 3000);
@@ -64,11 +43,33 @@ export default function BluetoothButton({addFoundDevice, resetFoundDevices}) {
 
     return(
         <IconButton
-            wrapperStyle={wrapperStyle}
-            textStyle={btnTextStyle}
-            textWrapperStyle={textWrapperStyle}
-            icon={icon} text={text}
+            wrapperStyle={styles.wrapperStyle}
+            textStyle={styles.btnTextStyle}
+            textWrapperStyle={styles.textWrapperStyle}
+            icon={styles.icon} text={text}
             onPress={findDevice}
         />
     );
 }
+
+const styles = StyleSheet.create({
+    wrapperStyle : {
+        width: 150,
+        padding: 10,
+        backgroundColor: Color.elemBg
+    },
+
+    textWrapperStyle : {
+        marginRight: 5
+    },
+
+    btnTextStyle : {
+        color: Color.elemText
+    },
+
+    icon : {
+        name: 'bluetooth',
+        size: 20,
+        color: Color.icon
+    }
+});

@@ -6,6 +6,9 @@ export const Color = {
     elemText: '#154C79',
     elemBorder: '#873e23',
 
+    statusBarBg: '#E28743',
+    statusBarText: '#154C79',
+
     screenBg: '#EEEEE4'
 };
 
